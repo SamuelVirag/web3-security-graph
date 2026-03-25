@@ -33,8 +33,7 @@ jobs:
       - name: Copy vault notes into content
         run: |
           rm -rf content
-          mkdir -p content
-          cp -r notes/* content/
+          cp -r notes content
 
       - name: Build Quartz
         run: npx quartz build
