@@ -41,8 +41,13 @@ jobs:
 
       - name: Build Quartz
         run: |
-          echo "Content dir contents:" && ls -la content/ | head -5
-          npx quartz build -d content -v
+          echo "PWD:" && pwd
+          echo "Content dir (absolute):" && ls content/ | wc -l
+          echo "Resolved path:" && node -e "const p=require('path'); console.log(p.join(process.cwd(), 'content'))"
+          echo "Files at resolved path:" && node -e "const fs=require('fs'); const p=require('path').join(process.cwd(),'content'); console.log(fs.readdirSync(p).length)"
+          npx quartz build -d content -v 2>&1 || true
+          echo "Trying with absolute path..."
+          npx quartz build -d "$(pwd)/content" -v
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
