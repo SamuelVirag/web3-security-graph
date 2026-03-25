@@ -35,10 +35,14 @@ jobs:
           rm -rf content
           mkdir content
           find notes -name '*.md' -exec cp {} content/ \;
-          echo "Content files:" && ls content/ | wc -l
+          echo "Content files copied:" && ls content/ | wc -l
+          echo "First 3 files:" && ls content/ | head -3
+          echo "index.md exists:" && test -f content/index.md && echo "yes" || echo "no"
 
       - name: Build Quartz
-        run: npx quartz build
+        run: |
+          echo "Content dir contents:" && ls -la content/ | head -5
+          npx quartz build -d content -v
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
