@@ -33,7 +33,9 @@ jobs:
       - name: Copy vault notes into content
         run: |
           rm -rf content
-          cp -r notes content
+          mkdir content
+          find notes -name '*.md' -exec cp {} content/ \;
+          echo "Content files:" && ls content/ | wc -l
 
       - name: Build Quartz
         run: npx quartz build
