@@ -35,19 +35,9 @@ jobs:
           rm -rf content
           mkdir content
           find notes -name '*.md' -exec cp {} content/ \;
-          echo "Content files copied:" && ls content/ | wc -l
-          echo "First 3 files:" && ls content/ | head -3
-          echo "index.md exists:" && test -f content/index.md && echo "yes" || echo "no"
 
       - name: Build Quartz
-        run: |
-          echo "PWD:" && pwd
-          echo "Content dir (absolute):" && ls content/ | wc -l
-          echo "Resolved path:" && node -e "const p=require('path'); console.log(p.join(process.cwd(), 'content'))"
-          echo "Files at resolved path:" && node -e "const fs=require('fs'); const p=require('path').join(process.cwd(),'content'); console.log(fs.readdirSync(p).length)"
-          npx quartz build -d content -v 2>&1 || true
-          echo "Trying with absolute path..."
-          npx quartz build -d "$(pwd)/content" -v
+        run: npx quartz build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
