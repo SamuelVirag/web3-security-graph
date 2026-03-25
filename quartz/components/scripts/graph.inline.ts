@@ -31,6 +31,7 @@ type NodeData = {
   id: SimpleSlug
   text: string
   tags: string[]
+  noteType: string
 } & SimulationNodeDatum
 
 type SimpleLinkData = {
@@ -149,6 +150,7 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
       id: url,
       text,
       tags: data.get(url)?.tags ?? [],
+      noteType: data.get(url)?.noteType ?? "",
     }
   })
   const graphData: { nodes: NodeData[]; links: LinkData[] } = {
@@ -193,15 +195,28 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
     {} as Record<(typeof cssVars)[number], string>,
   )
 
-  // calculate color
+  // color by note type from frontmatter
+  const noteTypeColors: Record<string, string> = {
+    moc:         "#e74c3c",  // red — topic maps (navigation hubs)
+    claim:       "#3498db",  // blue — core claims
+    problem:     "#e67e22",  // orange — vulnerabilities/problems
+    methodology: "#2ecc71",  // green — patterns/implementations
+    tension:     "#9b59b6",  // purple — unresolved tensions
+    vulnerability: "#e67e22", // orange — same as problem
+    "best-practice": "#2ecc71", // green — same as methodology
+  }
+  const defaultNodeColor = "#7f8c8d" // gray for uncategorized
+
   const color = (d: NodeData) => {
     const isCurrent = d.id === slug
     if (isCurrent) {
       return computedStyleMap["--secondary"]
-    } else if (visited.has(d.id) || d.id.startsWith("tags/")) {
+    } else if (d.id.startsWith("tags/")) {
       return computedStyleMap["--tertiary"]
+    } else if (d.noteType && noteTypeColors[d.noteType]) {
+      return noteTypeColors[d.noteType]
     } else {
-      return computedStyleMap["--gray"]
+      return defaultNodeColor
     }
   }
 
@@ -209,7 +224,9 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
     const numLinks = graphData.links.filter(
       (l) => l.source.id === d.id || l.target.id === d.id,
     ).length
-    return 2 + Math.sqrt(numLinks)
+    // topic maps are larger hub nodes
+    const base = d.noteType === "moc" ? 5 : 2
+    return base + Math.sqrt(numLinks)
   }
 
   let hoveredNodeId: string | null = null

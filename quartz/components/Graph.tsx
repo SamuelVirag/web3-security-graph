@@ -30,16 +30,16 @@ const defaultOptions: GraphOptions = {
   localGraph: {
     drag: true,
     zoom: true,
-    depth: 1,
+    depth: 2,
     scale: 1.1,
-    repelForce: 0.5,
+    repelForce: 0.6,
     centerForce: 0.3,
-    linkDistance: 30,
+    linkDistance: 40,
     fontSize: 0.6,
     opacityScale: 1,
-    showTags: true,
+    showTags: false,
     removeTags: [],
-    focusOnHover: false,
+    focusOnHover: true,
     enableRadial: false,
   },
   globalGraph: {
@@ -47,12 +47,12 @@ const defaultOptions: GraphOptions = {
     zoom: true,
     depth: -1,
     scale: 0.9,
-    repelForce: 0.5,
-    centerForce: 0.2,
-    linkDistance: 30,
-    fontSize: 0.6,
+    repelForce: 0.4,
+    centerForce: 0.15,
+    linkDistance: 40,
+    fontSize: 0.5,
     opacityScale: 1,
-    showTags: true,
+    showTags: false,
     removeTags: [],
     focusOnHover: true,
     enableRadial: true,
@@ -66,6 +66,13 @@ export default ((opts?: Partial<GraphOptions>) => {
     return (
       <div class={classNames(displayClass, "graph")}>
         <h3>{i18n(cfg.locale).components.graph.title}</h3>
+        <div class="graph-legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#e74c3c"></span>Topic Map</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#3498db"></span>Claim</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#e67e22"></span>Vulnerability</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#2ecc71"></span>Pattern</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#9b59b6"></span>Tension</span>
+        </div>
         <div class="graph-outer">
           <div class="graph-container" data-cfg={JSON.stringify(localGraph)}></div>
           <button class="global-graph-icon" aria-label="Global Graph">

@@ -6,6 +6,29 @@
     margin: 0;
   }
 
+  & > .graph-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4em 0.8em;
+    font-size: 0.7rem;
+    color: var(--darkgray);
+    margin: 0.3em 0 0 0;
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.25em;
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+  }
+
   & > .graph-outer {
     border-radius: 5px;
     border: 1px solid var(--lightgray);
